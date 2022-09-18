@@ -16,7 +16,7 @@ class TweetController extends Controller
      */
     public function index()
     {
-        $tweets = [];
+        $tweets = Tweet::getAllOrderByUpdated_at();
         return view('tweet.index', compact('tweets')); // tweet.indexはtweetフォルダのindex.blade.phpの意味
     }
 
@@ -38,7 +38,25 @@ class TweetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //　バリデーション
+        $validator = Validator::make($request->all(), [
+            'tweet' => 'required | max:191', 
+            'description' => 'required',
+        ]);
+        // バリデーション：エラー
+        if ($validator->fails()) {
+            return redirect()
+                ->route('tweet.create')
+                ->withInput()
+                ->withErrors($validator);
+        }
+        // create()は最初から用意されている関数
+        // 戻り値は挿入されたレコードの情報
+        $result = Tweet::create($request->all());
+        // ddd($result);
+        // ルーティング"todo.index"にリクエスト送信（一覧ページに移動）
+        return redirect()->route('tweet.index');
+        // 'tweet.index'はルーティング表を確認！！
     }
 
     /**
@@ -49,7 +67,11 @@ class TweetController extends Controller
      */
     public function show($id)
     {
-        //
+        // ddd($id);
+        // idを指定して1件のデータを取得したい
+        $tweet = Tweet::find($id);
+        return view('tweet.show', compact('tweet'));
+        // ここでは受け取ったidの値でテーブルからデータを取り出し，tweetという名前でshow.blade.phpに渡している．
     }
 
     /**
@@ -60,7 +82,9 @@ class TweetController extends Controller
      */
     public function edit($id)
     {
-        //
+        // 編集画面に移動する処理
+        $tweet = Tweet::find($id);
+        return view('tweet.edit', compact('tweet'));
     }
 
     /**
@@ -72,7 +96,23 @@ class TweetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // 指定したデータを更新する処理の作成
+        // バリデーション
+        $validator = Validator::make($request->all(), [
+            'tweet' => 'required | max:191',
+            'description' => 'required',
+        ]);
+        // バリデーション：エラー
+        if ($validator->fails()) {
+            return redirect()
+                ->route('tweet.edit', $id)
+                ->withInput()
+                -withErrors($validator);
+        }
+        // データ更新処理
+        $result = Tweet::find($id)->update($request->all());
+        // ddd($result);
+        return redirect()->route('tweet.index');
     }
 
     /**
@@ -83,6 +123,9 @@ class TweetController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // まずidで指定したデータを1件抽出し，そのデータを削除するという流れ．
+        $result = Tweet::find($id)->delete();
+        // 削除した後，一覧画面に戻るようにルーティング
+        return redirect()->route('tweet.index');
     }
 }
