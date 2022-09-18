@@ -16,7 +16,8 @@ class TweetController extends Controller
      */
     public function index()
     {
-        return view('tweet.index'); // tweet.indexはtweetフォルダのindex.blade.phpの意味
+        $tweets = [];
+        return view('tweet.index', compact('tweets')); // tweet.indexはtweetフォルダのindex.blade.phpの意味
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+// TweetControllerを使う時にはこれを追加しないと使えないよ
 use App\Http\Controllers\TweetController;
 
 /*
@@ -15,7 +15,9 @@ use App\Http\Controllers\TweetController;
 |
 */
 
+// localhostにtweetをつけるとTweetControllerに飛ぶよ．って処理
 Route::resource('tweet', TweetController::class);
+
 
 Route::get('/', function () {
     return view('welcome');
