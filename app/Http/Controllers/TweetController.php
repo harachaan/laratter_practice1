@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Models\Tweet;
 
+use Auth;
+
 class TweetController extends Controller
 {
     /**
@@ -50,6 +52,9 @@ class TweetController extends Controller
                 ->withInput()
                 ->withErrors($validator);
         }
+
+        // フォームから送信されてきたデータとユーザ id をマージし，DBに insertする．
+        $data = $request->merge(['user_id' => Auth::user()->id])->all();        
         // create()は最初から用意されている関数
         // 戻り値は挿入されたレコードの情報
         $result = Tweet::create($request->all());

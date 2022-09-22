@@ -15,8 +15,11 @@ use App\Http\Controllers\TweetController;
 |
 */
 
-// localhostにtweetをつけるとTweetControllerに飛ぶよ．って処理
-Route::resource('tweet', TweetController::class);
+// ログアウトした状態で`localhost/tweet`とurl直打ちしたら，ログイン画面に戻されるようにした．
+Route::group(['middleware' => 'auth'], function () {
+    // localhostにtweetをつけるとTweetControllerに飛ぶよ．って処理
+    Route::resource('tweet', TweetController::class);
+});
 
 
 Route::get('/', function () {
