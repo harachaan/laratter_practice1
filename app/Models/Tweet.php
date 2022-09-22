@@ -21,4 +21,9 @@ class Tweet extends Model
     {
         return self::orderBy('updated_at', 'desc')->get(); // descは降順を表す．
     }
+    // Tweet対User（多対１）のリレーションを作る
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
