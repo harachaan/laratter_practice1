@@ -9,6 +9,8 @@ use App\Models\Tweet;
 
 use Auth;
 
+use App\Models\User;
+
 class TweetController extends Controller
 {
     /**
@@ -132,5 +134,15 @@ class TweetController extends Controller
         $result = Tweet::find($id)->delete();
         // 削除した後，一覧画面に戻るようにルーティング
         return redirect()->route('tweet.index');
+    }
+    public function mydata()
+    {
+        // Userモデルに定義したリレーションを使用してデータを取得する．
+        $tweets = User::query() // Userのモデルを使って，操作したいよってことを表している．
+            ->find(Auth::user()->id)
+            ->userTweets() // User.phpで定義した関数
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('tweet.index', compact('tweets'));
     }
 }
