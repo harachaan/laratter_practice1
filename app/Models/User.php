@@ -46,4 +46,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tweet::class);
     }
+
+    // UserモデルとTweetモデルを多対多の連携にする
+    public function tweets()
+    {
+        return $this->belongsToMany(Tweet::class)->withTimestamps();
+    }
 }

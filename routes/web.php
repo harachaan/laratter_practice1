@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 // TweetControllerを使う時にはこれを追加しないと使えないよ
 use App\Http\Controllers\TweetController;
+// 新たなconrtrollerを使う時にはルーティングにこれを追加することをわすれない！
+use App\Http\Controllers\FavoriteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +20,8 @@ use App\Http\Controllers\TweetController;
 // ログアウトした状態で`localhost/tweet`とurl直打ちしたら，ログイン画面に戻されるようにした．
 Route::group(['middleware' => 'auth'], function () {
     
+    Route::post('tweet/{tweet}/favorites', [FavoriteController::class, 'store'])->name('favorites');
+    Route::post('tweet/{tweet}/unfavorites', [FavoriteController::class, 'destroy'])->name('unfavorites');
     Route::get('/tweet/mypage', [TweetController::class, 'mydata'])->name('tweet.mypage');
     // localhostにtweetをつけるとTweetControllerに飛ぶよ．って処理
     Route::resource('tweet', TweetController::class);
