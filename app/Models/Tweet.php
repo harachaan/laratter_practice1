@@ -31,4 +31,11 @@ class Tweet extends Model
     {
         return $this->belongsToMany(User::class)->withTimestamps();
     }
+    // Tweetモデルから交差テーブルを利用したImageモデルとの紐付きを定義した．
+    // これで多対多の関係でTweetImageのpivotモデルを経由してImageモデルが取得できるようになる．
+    // ORMとしてデータベースのテーブル定義をそのまま反映しているので，多対多の関係となっているが，実際はImageが複数のTweetを持つことはないので，実質1対多として扱う．
+    public function images()
+    {
+        return $this->belongsToMany(Image::class, 'tweet_image')->using(TweetImage::class);
+    }
 }
