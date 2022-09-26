@@ -28,8 +28,8 @@ class TweetsSeeder extends Seeder
         // TweetFactoryからデータを10件作成し，ImageFactoryから4件データを生成する．
         // 生成したtweetsレコードのデータからTweetsモデルにより，Pivotモデルを経由してattachでImageIdを紐づけて交差テーブルに保存
         // このデータでは10件のつぶやきレコードと，そのつぶやきにそれぞれ4件の画像が紐づくようになる．
-        Tweet::factory()->count(10)->create()->each(fn($tweet) =>
-            Image::factory()->count(4)->create()->each(fn($image) =>
+        Tweet::factory()->count(3)->create()->each(fn($tweet) =>
+            Image::factory()->count(2)->create()->each(fn($image) =>
                 $tweet->images()->attach($image->id)
             )
         );
